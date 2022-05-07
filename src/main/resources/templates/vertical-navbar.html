@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Design of the Week Template 12 - Pinegrow Web Editor</title>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+</head>
+<body>
+<input type="checkbox" id="nav-toggle" hidden>
+<nav th:fragment="vertical-navbar" class="nav">
+    <label for="nav-toggle" class="nav-toggle" onclick></label>
+
+    <h2 class="logo">
+        <a href="//dbmast.ru/">Детейлинг</a>
+    </h2>
+
+    <ul>
+        <li><a href="#1">Главная</a>
+        <li><a th:href="@{/product}">Наши услуги</a>
+        <li><a href="#3">О нас</a>
+        <li><a href="#4">Заявки</a>
+        <li><a href="#5">Заказы</a>
+        <li><a href="#7">Контакты</a>
+    </ul>
+</nav>
+
+</body>
+</html>
