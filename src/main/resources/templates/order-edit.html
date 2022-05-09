@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+    <link rel="pg-require" href="projectdb.pgml"/>
+    <link rel="pg-require" href="_pginfo/fonts.json"/>
+    <link rel="pg-require" href="pinegrow.json"/>
+</head>
+<body class="text-muted">
+<input type="checkbox" id="nav-toggle" hidden>
+<div th:replace="vertical-navbar::vertical-navbar"></div>
+<div th:replace="header::header"></div>
+<main>
+    <div class="container">
+    </div>
+    <section class="bg-light pb-5 pt-5">
+        <div class="container pb-5 pt-5">
+            <div class="bg-white p-4 p-lg-5">
+                <h2 class="mb-4" th:align="center">Информация о заказе</h2>
+                <form id="product-edit-form" th:action="@{/order/__${order.id}__}" th:object="${order}" th:method="patch" action="order-edit.html">
+                    <div class="col" th:align="center">
+                        <div class="row w-25">
+                            <label for="id-input">ID</label>
+                            <input class="form-control rounded-0" id="id-input" type="text" readonly="readonly" th:value="${order.id}" value="1"/>
+                        </div>
+
+                        <div class="row w-25">
+                            <label class="form-label" for="inputName">Номер заказа</label>
+                            <input type="text" class="form-control rounded-0" id="inputName" readonly="readonly" name="code" th:value="${order.code}" >
+                        </div>
+                        <div class="row w-25">
+                            <label class="form-label" for="input-car-brand">Марка</label>
+
+                            <select class="form-control form-select" id="input-car-brand" th:field="${order.car.brand}">
+                                <option th:each="car : ${cars}"
+                                        th:value="${car.brand}"
+                                        th:text="${car.brand}">
+                                </option>
+                            </select>
+                        </div>
+                        <!--<div class="row w-25">
+                            <label class="form-label" for="input-car-brand">Модель</label>
+                            <input type="text" class="form-control rounded-0 " id="input-car-model" name="carBrand" th:value="${order.carBrand}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('carBrand')}" th:errors="*{carBrand}" ></div>
+                            &lt;!&ndash;<select class="form-control form-select" id="author-input" th:field="${book.author.fullName}">
+                                <option th:each="author : ${authors}"
+                                        th:value="${author.fullName}"
+                                        th:text="${author.fullName}">
+                                </option>
+                            </select>&ndash;&gt;
+                        </div>-->
+                        <div class="row w-25">
+                            <label class="form-label" for="products-input">Состав заказа</label>
+                            <select multiple="multiple" class="form-control form-select" id="products-input" th:field="*{products}">
+                                <option th:each="product : ${products}"
+                                        th:value="${{product}}"
+                                        th:text="${product.productName}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="row w-25">
+                            <label class="form-label" for="inputTotal">Общая стоимость</label>
+                            <input type="text" class="form-control rounded-0" id="inputTotal" readonly="readonly" name="total" th:value="${order.total}" >
+                        </div>
+                        <div class="row w-25">
+                            <label class="form-label" for="input-car-brand">Статус заказа</label>
+                            <input type="text" class="form-control rounded-0 " id="input-status" readonly="readonly" name="status" th:value="${order.status}">
+                        </div>
+                        <div class="row w-25">
+                            <button class="btn btn-primary mt-3 rounded-0 rounded-pill" type="submit">
+                                <span class="align-middle">Обновить</span>
+                                <svg viewBox="0 0 24 24" fill="currentColor" height="16" width="16" class="ms-1">
+                                    <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <div th:replace="footer::footer"></div>
+</main>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

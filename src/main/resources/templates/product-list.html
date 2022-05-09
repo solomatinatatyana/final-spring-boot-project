@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <!-- Bootstrap core CSS -->
     <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
-    <!-- Custom styles for this template -->
     <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
     <link th:href="@{/css/nav.css}" rel="stylesheet"/>
@@ -50,25 +48,23 @@
                     <td th:text="${product.productName}">Услуга</td>
                     <td th:text="${product.description}">Описание</td>
                     <td th:text="${product.price}">Стоимость</td>
-                    <!--<td>
-                        <ul>
-                            <li>
-                                <a th:href="@{/author/__${author.id}__/edit}">
-                                    <button class="mt-1 main-button btn btn-sm btn-secondary">Изменить</button>
-                                </a>
-                            </li>
-                            <li>
-                                <form th:action="@{/author/{id}(id=${author.id})}" th:method="delete">
-                                    <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Удалить</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </td>-->
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                       <a th:href="@{/product/__${product.id}__/edit}">
+                           <button class="mt-1 main-button btn btn-sm btn-secondary">Редактировать</button>
+                       </a>
+                       <form th:action="@{/product/{id}(id=${product.id})}" th:method="delete">
+                           <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Удалить</button>
+                       </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>
             <div class="mt-5 text-center">
-                <a th:href="@{/products}" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Рассчитать стоимость</a>
+                <a th:href="@{/product}" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Рассчитать стоимость</a>
+                <a th:href="@{/product}" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Офомить заказ</a>
+            </div>
+            <div class="mt-5 text-center">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/product/add}" href="product-add.html" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Добавить</a>
             </div>
         </div>
     </section>

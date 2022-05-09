@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -16,11 +16,14 @@
     </h2>
 
     <ul>
-        <li><a href="#1">Главная</a>
+        <li><a th:href="@{/}">Главная</a>
         <li><a th:href="@{/product}">Наши услуги</a>
         <li><a href="#3">О нас</a>
-        <li><a href="#4">Заявки</a>
-        <li><a href="#5">Заказы</a>
+        <li><a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" href="#4">Заявки</a>
+        <li><a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:href="@{/order}">Заказы</a>
+        <li><a sec:authorize="hasRole('ROLE_USER')" th:href="@{/}" href="my-order-list.html">Мои Заказы</a>
+        <li><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/}">Пользователи</a>
+        <li><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/}">Справочник марок автомобилей</a>
         <li><a href="#7">Контакты</a>
     </ul>
 </nav>

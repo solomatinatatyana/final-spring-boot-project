@@ -1,5 +1,6 @@
 package ru.otus.finalproject.security;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.otus.finalproject.domain.User;
 import ru.otus.finalproject.repository.user.UserRepository;
-
 
 import java.util.HashSet;
 import java.util.Optional;

@@ -1,6 +1,7 @@
 package ru.otus.finalproject.service.products;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.finalproject.domain.Product;
 import ru.otus.finalproject.exceptions.ProductException;
 import ru.otus.finalproject.repository.products.ProductRepository;
@@ -16,18 +17,28 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     @Override
     public void createProduct(Product product) {
-        productRepository.saveAndFlush(product);
+        if(!productRepository.existsProductByProductName(product.getProductName())){
+            productRepository.saveAndFlush(product);
+        }else {
+            throw new ProductException("product with name ["+ product.getProductName() +"] is already exist!");
+        }
     }
 
+    @Transactional
     @Override
     public void updateProductById(long id, Product product) {
         Product productToBeUpdated = getProductById(id);
         productToBeUpdated.setProductName(product.getProductName());
         productToBeUpdated.setDescription(product.getDescription());
         productToBeUpdated.setPrice(product.getPrice());
-        productRepository.saveAndFlush(productToBeUpdated);
+        //if(!productRepository.existsProductByProductName(product.getProductName())){
+            productRepository.saveAndFlush(productToBeUpdated);
+        //}else {
+        //    throw new ProductException("product with name ["+ product.getProductName() +"] is already exist!");
+        //}
     }
 
     @Override
@@ -45,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
     }
 
+    @Transactional
     @Override
     public void deleteProductById(long id) {
         productRepository.deleteById(id);

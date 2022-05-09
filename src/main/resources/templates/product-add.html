@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Blank Template for Bootstrap</title>
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="blocks.css">
-    <link href="style.css" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+    <link rel="pg-require" href="projectdb.pgml"/>
+    <link rel="pg-require" href="_pginfo/fonts.json"/>
+    <link rel="pg-require" href="pinegrow.json"/>
 </head>
-<body>
-<div class="container">
-</div>
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<section class="bg-light pb-5 pt-5">
-    <div class="container pb-5 pt-5">
-        <div class="bg-white p-4 p-lg-5">
-            <h2 class="mb-4">Get In Touch</h2>
-            <form>
-                <div class="row">
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label" for="inputName">Name</label>
-                        <input type="text" class="form-control rounded-0" id="inputName" placeholder="Enter name...">
-                    </div>
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label" for="inputEmail">Email</label>
-                        <input type="email" class="form-control rounded-0" id="inputEmail" placeholder="Enter email...">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="inputSubject">Subject</label>
-                    <input type="text" class="form-control rounded-0" id="inputSubject" placeholder="Enter subject..">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="inputTextarea">Message</label>
-                    <textarea class="form-control rounded-0" rows="6" id="inputTextarea" placeholder="Enter your message..."></textarea>
-                </div>
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary ps-4 pe-4 rounded-0 rounded-pill text-uppercase">
-                        <span class="align-middle">Submit</span>
-                        <svg viewBox="0 0 24 24" fill="currentColor" height="16" width="16" class="ms-1">
-                            <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </form>
-        </div>
+<body class="text-muted">
+<input type="checkbox" id="nav-toggle" hidden>
+<div th:replace="vertical-navbar::vertical-navbar"></div>
+<div th:replace="header::header"></div>
+<main>
+    <div class="container">
     </div>
-</section>
+    <section class="bg-light pb-5 pt-5">
+        <div class="container pb-5 pt-5">
+            <div class="bg-white p-4 p-lg-5">
+                <h2 class="mb-4">Добавить услугу</h2>
+                <form th:action="@{/product}" th:method="post" th:object="${product}" action="product-add.html">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="inputName">Название</label>
+                            <input type="text" class="form-control rounded-0" id="inputName" placeholder="Введите название..." name="productName" required>
+                            <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}" th:errorclass="error"></span>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="inputPrice">Цена</label>
+                            <input type="number" class="form-control rounded-0 " id="inputPrice" placeholder="Введите цену..." name="price">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}" ></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="inputTextarea">Описание</label>
+                        <textarea class="form-control rounded-0" rows="6" id="inputTextarea" placeholder="Введите описание..." name="description"></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary ps-4 pe-4 rounded-0 rounded-pill text-uppercase">
+                            <span class="align-middle">Добавить</span>
+                            <svg viewBox="0 0 24 24" fill="currentColor" height="16" width="16" class="ms-1">
+                                <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <div th:replace="footer::footer"></div>
+</main>
 <script th:src="@{/assets/js/popper.min.js}"></script>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </body>

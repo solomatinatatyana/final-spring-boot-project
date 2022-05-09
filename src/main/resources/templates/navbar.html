@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,8 +28,15 @@
                 <li class="nav-item"> <a class="nav-link p-lg-3" href="#">Контакты</a>
                 </li>
             </ul>
-            <div class="d-flex flex-wrap gap-2 py-1"> <a href="#" class="btn btn-outline-primary pe-4 ps-4">Войти</a>
-                <a href="#" class="btn btn-primary pe-4 ps-4">Зарегистрироваться</a>
+            <div sec:authorize="!isAuthenticated()"class="d-flex flex-wrap gap-2 py-1">
+                <a th:href="@{/login}"href="login.html" class="btn btn-outline-primary pe-4 ps-4">Войти</a>
+                <a href="sign-up.html" class="btn btn-primary pe-4 ps-4">Зарегистрироваться</a>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="d-flex flex-wrap gap-2 py-1">
+<!--
+                сделать иконку и имя пользователя и ссылку на МОИ ЗАКАЗЫ и сслку на index после разлогина
+-->
+                <a th:href="@{/logout}" href="index.html" class="btn btn-outline-primary pe-4 ps-4">Выйти</a>
             </div>
         </div>
     </div>

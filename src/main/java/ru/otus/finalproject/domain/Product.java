@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -16,12 +17,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Поле обязательное и не может быть пустым")
     @Column(name = "product_name",nullable = false, unique = true)
     private String productName;
 
     @Column(name = "description")
     private String description;
 
+    @PositiveOrZero(message = "Цена должна быть неотрицательным числом")
     @Column(name = "price")
     private String price;
 

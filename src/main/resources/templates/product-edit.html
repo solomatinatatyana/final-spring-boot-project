@@ -1,12 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="../static/css/main.css">
-<link rel="stylesheet" href="/webjars/bootstrap/5.0.0/css/bootstrap.min.css">
 <head>
-    <meta charset="UTF-8">
-    <title>Online Библиотека</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+    <link rel="pg-require" href="projectdb.pgml"/>
+    <link rel="pg-require" href="_pginfo/fonts.json"/>
+    <link rel="pg-require" href="pinegrow.json"/>
 </head>
-<body>
-<div th:replace="navbar::navbar"></div>
+<body class="text-muted">
+<input type="checkbox" id="nav-toggle" hidden>
+<div th:replace="vertical-navbar::vertical-navbar"></div>
+<div th:replace="header::header"></div>
+<main>
+    <div class="container">
+    </div>
+    <section class="bg-light pb-5 pt-5">
+        <div class="container pb-5 pt-5">
+            <div class="bg-white p-4 p-lg-5">
+                <h2 class="mb-4" th:align="center">Информация об услуге</h2>
+                <form id="product-edit-form" th:action="@{/product/__${product.id}__}" th:object="${product}" th:method="patch" action="product-edit.html">
+                    <div class="col" th:align="center">
+                        <div class="row w-25">
+                            <label for="id-input">ID</label>
+                            <input class="form-control rounded-0" id="id-input" type="text" readonly="readonly" th:value="${product.id}" value="1"/>
+                        </div>
+
+                        <div class="row w-25">
+                            <label class="form-label" for="inputName">Название</label>
+                            <input type="text" class="form-control rounded-0" id="inputName" name="productName" th:value="${product.productName}" >
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}" ></div>
+                        </div>
+                        <div class="row w-25">
+                            <label class="form-label" for="inputPrice">Цена</label>
+                            <input type="number" class="form-control rounded-0 " id="inputPrice" name="price" th:value="${product.price}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}" ></div>
+                        </div>
+                        <div class="row w-25">
+                            <label class="form-label" for="inputTextarea">Описание</label>
+                            <input class="form-control rounded-0" rows="6" id="inputTextarea" name="description" th:value="${product.description}">
+                        </div>
+                        <div class="row w-25">
+                            <button class="btn btn-primary mt-3 rounded-0 rounded-pill" type="submit">
+                                <span class="align-middle">Обновить</span>
+                                <svg viewBox="0 0 24 24" fill="currentColor" height="16" width="16" class="ms-1">
+                                    <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <div th:replace="footer::footer"></div>
+</main>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

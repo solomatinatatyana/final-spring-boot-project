@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +28,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "email")
     private String email;
 
@@ -38,4 +44,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "roles")
     private Role roles;
+
+    public User(long id, String username, String password, String email, boolean active, Role roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.active = active;
+        this.roles = roles;
+    }
+
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Order> orders;
 }
