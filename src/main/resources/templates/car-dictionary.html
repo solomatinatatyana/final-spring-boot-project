@@ -30,47 +30,37 @@
         <div class="container pb-5 pt-5">
             <div class="mb-4 row">
                 <div class="col-md">
-                    <h2 class="h5 text-primary">Заказы</h2>
+                    <h2 class="h5 text-primary">Справочник марок автомобилей</h2>
                     <h3 class="border border-dark fw-bold h1 mb-3 text-dark">Профессиональный детейлинг вашего автомобиля</h3>
                     <div class="bg-primary col-2 d-inline-flex mb-3 pb-1"></div>
                 </div>
             </div>
-            <form th:action="@{/order/my-orders}" th:method="get" id="filter-form" action="my-order-list.html">
-                <div class="input-group mb-3">
-                    <input class="form-control" style="width: 25px" placeholder="input order's code" type="text" name="code" aria-describedby="button"/>
-                    <input class="form-control" style="width: 25px" placeholder="input order's car brand" type="text" name="brand" aria-describedby="button"/>
-                    <input class="form-control" style="width: 25px" placeholder="input order's status" type="text" name="status" aria-describedby="button"/>
-                    <button class="btn btn-primary btn-sm" type="submit" id="button">Найти</button>
+            <form th:action="@{/admin/car}" th:method="post" action="car-dictionary.html">
+                <div class="input-group mb-3 w-25">
+                    <input class="form-control" placeholder="input your car's brand" type="text", name="brand" id="car-brand"/>
+                    <button class="btn btn-primary btn-sm" type="submit">Создать</button>
                 </div>
             </form>
             <table class="table table-hover">
                 <thead>
                 <tr th:align="center">
-                    <th>Номер заказа</th>
-                    <th>Марка автомобиля</th>
-                    <th>Состав заказа</th>
-                    <th>Общая стоимость</th>
-                    <th>Статус заказа</th>
+                    <th>Марка</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="order : ${orders}">
-                    <td th:text="${order.code}" th:align="center">Номер заказа</td>
-                    <td th:text="${order.car.brand}" th:align="center">Марка автомобиля</td>
-                    <td>
-                        <ul th:each="product : ${order.products}">
-                            <li th:text="${product.productName}"></li>
-                        </ul>
+                <tr th:each="car : ${cars}">
+                    <td th:align="center" th:text="${car.brand}">Марка</td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                       <a th:href="@{/admin/car/__${car.id}__/edit}">
+                           <button class="mt-1 main-button btn btn-sm btn-secondary">Редактировать</button>
+                       </a>
+                       <form th:action="@{/admin/car/{id}(id=${car.id})}" th:method="delete">
+                           <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Удалить</button>
+                       </form>
                     </td>
-                    <td th:text="${order.total}" th:align="center">Общая стоимость</td>
-                    <td th:text="${order.status}" th:align="center">Статус заказа</td>
                 </tr>
                 </tbody>
             </table>
-            <div class="mt-5 text-center">
-                <!-- <a th:href="@{/product}" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Рассчитать стоимость</a>
-                 <a th:href="@{/product}" class="btn btn-primary pb-2 pe-4 ps-4 pt-2">Офомить заказ</a>-->
-            </div>
         </div>
     </section>
     <div th:replace="footer::footer"></div>

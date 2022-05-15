@@ -3,11 +3,14 @@ package ru.otus.finalproject.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.validator.constraints.UniqueElements;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 @Data
@@ -26,7 +29,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code")
     private String code;
 
@@ -40,18 +42,41 @@ public class Order {
     @Column(name = "total")
     private Double total;
 
-    /*@Column(name = "request_id")
-    private long requestId;*/
+    @Column(name = "request_id")
+    private long requestId;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "customer_name")
+    private String customerName;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = Product.class, cascade = CascadeType.DETACH)
     @JoinTable(name = "orders_products",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    @Setter
     private List<Product> products;
 
+    public Order(long id, String code, Car car, User user) {
+        this.id = id;
+        this.code = code;
+        this.car = car;
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", car=" + car +
+                ", status='" + status + '\'' +
+                ", total=" + total +
+                ", user=" + user +
+                ", products=" + products +
+                '}';
+    }
 }

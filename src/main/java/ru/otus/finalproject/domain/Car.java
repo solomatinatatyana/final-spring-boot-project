@@ -7,8 +7,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +28,10 @@ public class Car {
     private String model;*/
 
     @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "car")
     private List<Order> orders;
+
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "car")
+    private Set<Request> requests;
 }

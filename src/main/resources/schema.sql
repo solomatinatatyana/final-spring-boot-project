@@ -29,16 +29,24 @@ create table products(
     price int(20)
 );
 
+create table requests(
+    id bigint AUTO_INCREMENT primary key ,
+    first_name varchar (255),
+    phone varchar (50),
+    car_brand_id bigint references cars(id),
+    status varchar (50),
+    comment varchar(255)
+);
+
 create table orders(
     id bigint AUTO_INCREMENT primary key ,
     code varchar (50),
     car_brand_id bigint references cars(id),
     status varchar (50),
     total double (50),
-/*
     request_id bigint,
-*/
     user_id bigint references detailing_users(id),
+    customer_name varchar(50),
     unique key unique_uk_2(code)
 );
 
@@ -49,16 +57,7 @@ create table orders_products (
     FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
-create table requests(
-    id bigint AUTO_INCREMENT primary key ,
-    first_name varchar (255),
-    phone varchar (50),
-    car_brand varchar(50),
-    status double (50)
-/*
-    customer_id bigint references customers(id)
-*/
-);
+
 
 create table requests_products (
    request_id bigint,

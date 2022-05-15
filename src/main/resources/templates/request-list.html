@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+    <title>Design of the Week Template 12 - Pinegrow Web Editor</title>
+    <link rel="pg-require" href="projectdb.pgml"/>
+    <link rel="pg-require" href="_pginfo/fonts.json"/>
+    <link rel="pg-require" href="pinegrow.json"/>
 </head>
-<body>
+<body class="text-muted">
+<input type="checkbox" id="nav-toggle" hidden>
+<div th:replace="vertical-navbar::vertical-navbar"></div>
+<div th:replace="header::header"></div>
+<main>
+    <section class="bg-secondary pb-5 position-relative poster pt-5 text-white-50">
+        <div class="container mt-5 pb-5 pt-5">
+            <div class="mt-5 pt-5 row">
+                <div class="col-md-10 col-xl-7 pt-5">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-light pb-5 pt-5">
+        <div class="container pb-5 pt-5">
+            <div class="mb-4 row">
+                <div class="col-md">
+                    <h2 class="h5 text-primary">Заявки</h2>
+                    <h3 class="border border-dark fw-bold h1 mb-3 text-dark">Профессиональный детейлинг вашего автомобиля</h3>
+                    <div class="bg-primary col-2 d-inline-flex mb-3 pb-1"></div>
+                </div>
+            </div>
+            <form th:action="@{/request}" th:method="get" id="filter-form" action="request-list.html">
+                <div class="input-group mb-3">
+                    <input class="form-control" style="width: 25px" placeholder="input request's fio" type="text" name="firstName" aria-describedby="button"/>
 
+                    <input class="form-control" style="width: 25px" placeholder="input request's status" type="text" name="status" aria-describedby="button"/>
+                    <input class="form-control" style="width: 25px" placeholder="input cutomer's phone" type="text" name="phone" aria-describedby="button"/>
+                    <button class="btn btn-primary btn-sm" type="submit" id="button">Найти</button>
+                </div>
+            </form>
+            <table class="table table-hover">
+                <thead>
+                <tr th:align="center">
+                    <th>ID заявки</th>
+                    <th>ФИО</th>
+                    <th>Номер телефона</th>
+                    <th>Марка автомобиля</th>
+                    <th>Состав заявки</th>
+                    <th>Статус заявки</th>
+                    <th>Комментарий</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="request : ${requests}">
+                    <td th:text="${request.id}" th:align="center">ФИО</td>
+                    <td th:text="${request.firstName}" th:align="center">ФИО</td>
+                    <td th:text="${request.phone}" th:align="center">Телефон</td>
+                    <td th:text="${request.car.brand}" th:align="center">Марка автомобиля</td>
+                    <td>
+                        <ul th:each="product : ${request.products}">
+                            <li th:text="${product.productName}"></li>
+                        </ul>
+                    </td>
+                    <td th:text="${request.status}" th:align="center">Статус заказа</td>
+                    <td th:text="${request.comment}" th:align="center">Комментарий</td>
+                    <td>
+                        <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:href="@{/request/__${request.id}__/edit}">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary">Редактировать</button>
+                        </a>
+                        <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/request/{id}/cancel(id=${request.id})}" th:method="post">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Отменить</button>
+                        </form>
+                        <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/request/{id}/approve(id=${request.id})}" th:method="post">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Подтвердить</button>
+                        </form>
+                        <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/request/{id}(id=${request.id})}" th:method="delete">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="mt-5 text-center">
+            </div>
+        </div>
+    </section>
+    <div th:replace="footer::footer"></div>
+</main>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

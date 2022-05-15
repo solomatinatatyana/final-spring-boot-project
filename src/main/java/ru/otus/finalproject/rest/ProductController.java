@@ -1,5 +1,6 @@
 package ru.otus.finalproject.rest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import ru.otus.finalproject.service.products.ProductService;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class ProductController {
 
@@ -29,7 +31,7 @@ public class ProductController {
 
     //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
     @GetMapping(value = "/product/{id}/edit")
-    public String editAuthor(@PathVariable("id") long id, Model model){
+    public String editProduct(@PathVariable("id") long id, Model model){
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
         return "product-edit";

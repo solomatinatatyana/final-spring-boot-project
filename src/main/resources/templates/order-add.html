@@ -1,10 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.0.0/css/bootstrap.min.css">
+    <link th:href="@{/bootstrap_theme/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/blocks.css}"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/nav.css}" rel="stylesheet"/>
+    <link rel="pg-require" href="projectdb.pgml"/>
+    <link rel="pg-require" href="_pginfo/fonts.json"/>
+    <link rel="pg-require" href="pinegrow.json"/>
 </head>
-<body>
+<body class="text-muted">
+<input type="checkbox" id="nav-toggle" hidden>
+<div th:replace="vertical-navbar::vertical-navbar"></div>
+<div th:replace="header::header"></div>
+<main>
+    <div class="container">
+    </div>
+    <section class="bg-light pb-5 pt-5">
+        <div class="container pb-5 pt-5">
+            <div class="bg-white p-4 p-lg-5">
+                <h2 class="mb-4" th:align="center">Оформление заказа</h2>
+                <form id="order-add-form" th:action="@{/order}" th:object="${order}" th:method="post" action="order-add.html">
+                    <div class="col" th:align="center">
 
+                        <div class="row w-25">
+                            <label for="fio-input">ФИО</label>
+                            <input class="form-control rounded-0" id="fio-input" type="text" name="username" th:value="${user.username}" value="username"/>
+                        </div>
+
+                        <div class="row w-25">
+                            <label for="phone-input">Телефон</label>
+                            <input class="form-control rounded-0 bfh-" placeholder="70000000000" pattern="^\7\d{10}" id="phone-input" type="text" name="phone" th:value="${user.phone}" value="phone"/>
+                        </div>
+
+                        <div class="row mb-2 w-25">
+                            <label class="form-label" for="input-car-brand">Марка</label>
+                            <input class="form-control" placeholder="input car's brand" type="text" name="brand" id="input-car-brand" />
+
+                            <!--<select class="form-control form-select" id="input-car-brand" name="brand" th:field="${order.car}">
+                                <option value="">Select brand</option>
+                                <option th:each="car : ${cars}"
+                                        th:value="${{car}}"
+                                        th:text="${car}">
+                                </option>
+                            </select>-->
+
+                        </div>
+
+
+                        <div class="row w-50 h-50">
+                            <label class="form-label" for="products-input">Услуги</label>
+                            <select multiple="multiple" class="form-control form-select" id="products-input" th:field="*{products}">
+                                <option th:each="product : ${products}"
+                                        th:value="${{product}}"
+                                        th:text="${product.productName}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="row w-25">
+                            <button class="btn btn-primary mt-3 rounded-0 rounded-pill" type="submit">
+                                <span class="align-middle">Создать</span>
+                                <svg viewBox="0 0 24 24" fill="currentColor" height="16" width="16" class="ms-1">
+                                    <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+               <!-- <form th:action="@{/order}" th:method="post" th:object="${order}" action="order-add.html">
+                    &lt;!&ndash;<div class="row mb-2 w-25">
+                        <label class="main-lable" for="book-title">Введите название книги: </label>
+                        <input class="form-control" placeholder="input your title" type="text", name="title" id="book-title" th:field="*{title}"/>
+                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="error"></span>
+                    </div>&ndash;&gt;
+
+                    &lt;!&ndash;<div class="row mb-2 w-25">
+                        <label class="main-lable" for="book-author">Введите автора: </label>
+                        <input class="form-control" placeholder="input author's fio" type="text", name="fio" id="book-author" />
+                    </div>&ndash;&gt;
+                    <div class="row w-25">
+                        <label for="fio-input">ФИО</label>
+                        <input class="form-control rounded-0" id="fio-input" type="text" name="username" th:value="${user.username}" value="username"/>
+                    </div>
+
+                    <div class="row mb-2 w-25">
+                        <label class="main-lable" for="book-genre">Введите жанр: </label>
+                        <input class="form-control" placeholder="input genre's name" type="text", name="brand" id="book-genre" />
+                    </div>
+
+                    <div class="row w-25">
+                        <button class="btn btn-primary mt-3" type="submit">Создать</button>
+                    </div>
+                </form>-->
+            </div>
+        </div>
+    </section>
+    <div th:replace="footer::footer"></div>
+</main>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 </body>
 </html>

@@ -26,16 +26,19 @@ public class Request {
     private String status;
 
     @Column(name = "phone")
-    private Double phone;
+    private String phone;
 
-    /*@ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;*/
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "car_brand_id")
+    private Car car;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(targetEntity = Product.class, cascade = CascadeType.ALL)
-    @JoinTable(name = "request_products",
+    @ManyToMany(targetEntity = Product.class, cascade = CascadeType.DETACH)
+    @JoinTable(name = "requests_products",
             joinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
     private List<Product> products;
+
+    @Column(name = "comment")
+    private String comment;
 }

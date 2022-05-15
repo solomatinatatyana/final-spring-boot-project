@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum OrderStatus {
     NEW("Новый"),
     ACTIVE("Активный"),
+    CANCELED("Отменен"),
     DONE("Завершен"),
     ARCHIVE("В архиве");
 

@@ -9,9 +9,6 @@
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
     <link th:href="@{/css/nav.css}" rel="stylesheet"/>
     <title>Design of the Week Template 12 - Pinegrow Web Editor</title>
-    <link rel="pg-require" href="projectdb.pgml"/>
-    <link rel="pg-require" href="_pginfo/fonts.json"/>
-    <link rel="pg-require" href="pinegrow.json"/>
 </head>
 <body class="text-muted">
 <input type="checkbox" id="nav-toggle" hidden>
@@ -40,14 +37,16 @@
                     <input class="form-control" style="width: 25px" placeholder="input order's code" type="text" name="code" aria-describedby="button"/>
                     <input class="form-control" style="width: 25px" placeholder="input order's car brand" type="text" name="brand" aria-describedby="button"/>
                     <input class="form-control" style="width: 25px" placeholder="input order's status" type="text" name="status" aria-describedby="button"/>
-                    <input class="form-control" style="width: 25px" placeholder="input book's genre" type="text" name="genre" aria-describedby="button"/>
+                    <input class="form-control" style="width: 25px" placeholder="input user's phone" type="text" name="phone" aria-describedby="button"/>
+                    <input class="form-control" style="width: 25px" placeholder="input user's user id" type="text" name="userId" aria-describedby="button"/>
                     <input class="form-control" style="width: 25px" placeholder="input book's genre" type="text" name="genre" aria-describedby="button"/>
                     <button class="btn btn-primary btn-sm" type="submit" id="button">Найти</button>
                 </div>
             </form>
             <table class="table table-hover">
                 <thead>
-                <tr th:align="center">
+                <tr>
+                    <th>Клиент</th>
                     <th>Номер заказа</th>
                     <th>Марка автомобиля</th>
                     <th>Состав заказа</th>
@@ -57,6 +56,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orders}">
+                    <td th:text="${order.customerName!=null} ? ${order.customerName} : ${order.user.username}" th:align="center">Клиент</td>
                     <td th:text="${order.code}" th:align="center">Номер заказа</td>
                     <td th:text="${order.car.brand}" th:align="center">Марка автомобиля</td>
                     <td>
@@ -70,9 +70,12 @@
                         <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:href="@{/order/__${order.id}__/edit}">
                             <button class="mt-1 main-button btn btn-sm btn-secondary">Редактировать</button>
                         </a>
-                        <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:href="@{/order/__${order.id}__/edit}">
-                            <button class="mt-1 main-button btn btn-sm btn-secondary">Отменить</button>
-                        </a>
+                        <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/order/{id}/cancel(id=${order.id})}" th:method="post">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Отменить</button>
+                        </form>
+                        <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/order/{id}/close(id=${order.id})}" th:method="post">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Завершить</button>
+                        </form>
                         <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/order/{id}(id=${order.id})}" th:method="delete">
                             <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Удалить</button>
                         </form>

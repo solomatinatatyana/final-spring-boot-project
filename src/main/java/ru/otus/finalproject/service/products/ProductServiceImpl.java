@@ -1,5 +1,6 @@
 package ru.otus.finalproject.service.products;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.finalproject.domain.Product;
@@ -8,6 +9,7 @@ import ru.otus.finalproject.repository.products.ProductRepository;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -34,11 +36,7 @@ public class ProductServiceImpl implements ProductService {
         productToBeUpdated.setProductName(product.getProductName());
         productToBeUpdated.setDescription(product.getDescription());
         productToBeUpdated.setPrice(product.getPrice());
-        //if(!productRepository.existsProductByProductName(product.getProductName())){
-            productRepository.saveAndFlush(productToBeUpdated);
-        //}else {
-        //    throw new ProductException("product with name ["+ product.getProductName() +"] is already exist!");
-        //}
+        productRepository.saveAndFlush(productToBeUpdated);
     }
 
     @Override

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <title>NavBar</title>
@@ -12,34 +12,63 @@
                 <div class="col">
                     <div class="py-1"> <a href="#" class="me-md-2 text-decoration-none"> <span class="me-md-1"> <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                             <path d="M21 16.42v3.536a1 1 0 0 1-.93.998c-.437.03-.794.046-1.07.046-8.837 0-16-7.163-16-16 0-.276.015-.633.046-1.07A1 1 0 0 1 4.044 3H7.58a.5.5 0 0 1 .498.45c.023.23.044.413.064.552A13.901 13.901 0 0 0 9.35 8.003c.095.2.033.439-.147.567l-2.158 1.542a13.047 13.047 0 0 0 6.844 6.844l1.54-2.154a.462.462 0 0 1 .573-.149 13.901 13.901 0 0 0 4 1.205c.139.02.322.042.55.064a.5.5 0 0 1 .449.498z"/>
-                                        </svg> </span> <span class="d-md-inline d-none">                                             +0-123-456-789 </span> </a> <a href="#" class="me-md-2 text-decoration-none"> <span class="me-md-1"> <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                        </svg> </span> <span class="d-md-inline d-none">                                             +0-123-456-789 </span> </a>
+                        <a class="me-md-2 text-decoration-none"><span class="me-md-1"> <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                                             <path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm9.06 8.683L5.648 6.238 4.353 7.762l7.72 6.555 7.581-6.56-1.308-1.513-6.285 5.439z"/>
-                                        </svg> </span> <span class="d-md-inline d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">Оставить заявку</span> </a>
+                        </svg> </span> <span class="d-md-inline d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">Оставить заявку</span></a>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/order/add}" href="order-add.html" class="me-md-2 text-decoration-none"> <span class="me-md-1"> <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                            <path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm9.06 8.683L5.648 6.238 4.353 7.762l7.72 6.555 7.581-6.56-1.308-1.513-6.285 5.439z"/>
+                                        </svg> </span> <span class="d-md-inline d-none" >Оформить заказ</span> </a>
                     </div>
                 </div>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form th:method="post">
+                            <form th:action="@{/request}" th:method="post">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Оставить заявку</h5>
+                                    <h5 class="modal-title" id="requestModalLabel">Оставить заявку</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <label for="first-name" class="col-form-label">Имя:</label>
+                                            <input type="text" class="form-control" id="first-name" name="firstName">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="message-text" class="col-form-label">Message:</label>
-                                            <textarea class="form-control" id="message-text"></textarea>
+                                            <label for="phone" class="col-form-label">Номер телефона:</label>
+                                            <input type="text" class="form-control" id="phone" name="phone">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="car-brand" class="col-form-label">Марка автомобиля:</label>
+                                            <input type="text" class="form-control" id="car-brand" name="brand">
+                                            <!--<select class="form-control form-select" id="input-car-brand" th:field="${cars}">
+                                                <option th:each="car : ${cars}"
+                                                        th:value="${car}"
+                                                        th:text="${car.brand}">
+                                                </option>
+                                            </select>-->
+
+                                        </div>
+
+                                       <!-- <div class="row w-50 h-50">
+                                            <label class="form-label" for="products-input">Список возможных услуг:</label>
+                                            <select multiple="multiple" class="form-control form-select" id="products-input" th:field="*{products}">
+                                                <option th:each="product : ${products}"
+                                                        th:value="${{product}}"
+                                                        th:text="${product.productName}">
+                                                </option>
+                                            </select>
+                                        </div>-->
+
+                                        <div class="mb-3">
+                                            <label for="message-text" class="col-form-label">Комментарий:</label>
+                                            <textarea class="form-control" id="message-text" name="comment"></textarea>
                                         </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                    <button type="button" class="btn btn-primary">Отправить заявку</button>
+                                    <button type="button" class="mt-1 main-button btn btn-sm btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Отправить заявку</button>
                                 </div>
                             </form>
                         </div>
@@ -64,9 +93,6 @@
             </div>
         </div>
     </div>
-<!--
-    <div th:replace="navbar::vertical-navbar"></div>
--->
     <div th:replace="navbar::navbar"></div>
 </header>
 </body>

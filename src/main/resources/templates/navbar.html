@@ -9,7 +9,7 @@
 <body>
 
 <nav th:fragment="navbar" class="navbar navbar-dark navbar-expand-lg shadow-none">
-    <div class="container"> <a class="align-items-center d-inline-flex fw-bold h4 mb-0 navbar-brand text-primary text-uppercase" href="#"> <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 100 100" width="2.5em" height="2.5em" class="me-1" fill="currentColor">
+    <div class="container"> <a class="align-items-center d-inline-flex fw-bold h4 mb-0 navbar-brand text-primary text-uppercase" th:href="@{/}"> <svg version="1.0" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 100 100" width="2.5em" height="2.5em" class="me-1" fill="currentColor">
                             <path d="M38.333 80a11.571 11.571 0 0 1-7.646-2.883A11.724 11.724 0 0 1 26.834 70H10V46.667L43.333 40l20-20H90v26.667H43.995l-27.328 5.465v11.2h11.166a11.787 11.787 0 0 1 4.212-4.807 11.563 11.563 0 0 1 12.577 0 11.789 11.789 0 0 1 4.213 4.807h7.833V70h-6.837a11.719 11.719 0 0 1-3.853 7.117A11.571 11.571 0 0 1 38.333 80Zm0-16.667a5 5 0 1 0 5 5 5.006 5.006 0 0 0-5.001-5Zm27.761-36.666L52.762 40h30.571V26.667Z"/>
         <path d="M56.667 63.333h-7.833a11.6 11.6 0 0 0-21 0H16.667v-11.2l27.328-5.465h12.672Z" opacity="0.2"/>
         <path d="M90 63.333H80v-10h-6.667v10h-10V70h10v10H80V70h10Z"/>
@@ -19,23 +19,45 @@
         </button>
         <div class="collapse navbar-collapse " id="navbarNavDropdown-2">
             <ul class="me-auto navbar-nav">
-                <li class="nav-item"> <a class="nav-link p-lg-3" th:href="@{/}">Главная</a>
+                <li class="nav-item">
+                    <a class="nav-link p-lg-3" th:href="@{/}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+                            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+                        </svg>
+                        Главная</a>
                 </li>
-                <li class="nav-item"> <a class="nav-link p-lg-3" href="#">О нас</a>
+                <li class="nav-item"> <a class="nav-link p-lg-3" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+                        <path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704l1.323-6.208Zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z"/>
+                    </svg>
+                    О нас</a>
                 </li>
-                <li class="nav-item"> <a class="nav-link p-lg-3" th:href="@{/product}">Услуги</a>
+                <li class="nav-item"> <a class="nav-link p-lg-3" th:href="@{/product}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wrench-adjustable" viewBox="0 0 16 16">
+                        <path d="M16 4.5a4.492 4.492 0 0 1-1.703 3.526L13 5l2.959-1.11c.027.2.041.403.041.61Z"/>
+                        <path d="M11.5 9c.653 0 1.273-.139 1.833-.39L12 5.5 11 3l3.826-1.53A4.5 4.5 0 0 0 7.29 6.092l-6.116 5.096a2.583 2.583 0 1 0 3.638 3.638L9.908 8.71A4.49 4.49 0 0 0 11.5 9Zm-1.292-4.361-.596.893.809-.27a.25.25 0 0 1 .287.377l-.596.893.809-.27.158.475-1.5.5a.25.25 0 0 1-.287-.376l.596-.893-.809.27a.25.25 0 0 1-.287-.377l.596-.893-.809.27-.158-.475 1.5-.5a.25.25 0 0 1 .287.376ZM3 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    Услуги</a>
                 </li>
-                <li class="nav-item"> <a class="nav-link p-lg-3" href="#">Контакты</a>
+                <li class="nav-item"> <a class="nav-link p-lg-3" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                    </svg>
+                    Контакты</a>
+                </li>
+                <li class="nav-item"> <a sec:authorize="isAuthenticated()" class="nav-link p-lg-3" th:href="@{/order/my-orders}" href="my-order-list.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                    </svg>
+                    Мои заказы</a>
                 </li>
             </ul>
-            <div sec:authorize="!isAuthenticated()"class="d-flex flex-wrap gap-2 py-1">
+            <div sec:authorize="!isAuthenticated()" class="d-flex flex-wrap gap-2 py-1">
                 <a th:href="@{/login}"href="login.html" class="btn btn-outline-primary pe-4 ps-4">Войти</a>
-                <a href="sign-up.html" class="btn btn-primary pe-4 ps-4">Зарегистрироваться</a>
+                <a th:href="@{/registration}" href="sign-up.html" class="btn btn-primary pe-4 ps-4">Зарегистрироваться</a>
             </div>
             <div sec:authorize="isAuthenticated()" class="d-flex flex-wrap gap-2 py-1">
-<!--
-                сделать иконку и имя пользователя и ссылку на МОИ ЗАКАЗЫ и сслку на index после разлогина
--->
+                <p>Logged by: <span th:text="${#authentication.getName()}">User</span></p>
                 <a th:href="@{/logout}" href="index.html" class="btn btn-outline-primary pe-4 ps-4">Выйти</a>
             </div>
         </div>

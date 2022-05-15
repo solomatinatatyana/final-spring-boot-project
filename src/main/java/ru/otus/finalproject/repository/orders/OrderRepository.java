@@ -16,4 +16,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @EntityGraph(value = "order-entity-graph")
     List<Order> findAll();
+
+    boolean existsOrderByCode(String code);
+
 }

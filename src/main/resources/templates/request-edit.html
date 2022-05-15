@@ -22,41 +22,37 @@
     <section class="bg-light pb-5 pt-5">
         <div class="container pb-5 pt-5">
             <div class="bg-white p-4 p-lg-5">
-                <h2 class="mb-4" th:align="center">Информация о заказе</h2>
-                <form id="order-edit-form" th:action="@{/order/__${order.id}__}" th:object="${order}" th:method="patch" action="order-edit.html">
+                <h2 class="mb-4" th:align="center">Информация о заявке</h2>
+                <form id="request-edit-form" th:action="@{/request/__${request.id}__}" th:object="${request}" th:method="patch" action="request-edit.html">
                     <div class="col" th:align="center">
                         <div class="row w-25">
                             <label for="id-input">ID</label>
-                            <input class="form-control rounded-0" id="id-input" type="text" readonly="readonly" th:value="${order.id}" value="1"/>
+                            <input class="form-control rounded-0" id="id-input" type="text" readonly="readonly" th:value="${request.id}" value="1"/>
                         </div>
 
                         <div class="row w-25">
-                            <label class="form-label" for="inputCode">Номер заказа</label>
-                            <input type="text" class="form-control rounded-0" id="inputCode" readonly="readonly" name="code" th:value="${order.code}" >
+                            <label class="form-label" for="inputFio">ФИО</label>
+                            <input type="text" class="form-control rounded-0" id="inputFio" name="firstName" th:value="${request.firstName}" >
                         </div>
+
+                        <div class="row w-25">
+                            <label class="form-label" for="inputPhone">Телефон</label>
+                            <input type="text" class="form-control rounded-0" id="inputPhone" name="phone" th:value="${request.phone}" >
+                        </div>
+
                         <div class="row w-25">
                             <label class="form-label" for="input-car-brand">Марка</label>
 
-                            <select class="form-control form-select" id="input-car-brand" th:field="${order.car.brand}">
+                            <select class="form-control form-select" id="input-car-brand" th:field="${request.car.brand}">
                                 <option th:each="car : ${cars}"
                                         th:value="${car.brand}"
                                         th:text="${car.brand}">
                                 </option>
                             </select>
                         </div>
-                        <!--<div class="row w-25">
-                            <label class="form-label" for="input-car-brand">Модель</label>
-                            <input type="text" class="form-control rounded-0 " id="input-car-model" name="carBrand" th:value="${order.carBrand}">
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('carBrand')}" th:errors="*{carBrand}" ></div>
-                            &lt;!&ndash;<select class="form-control form-select" id="author-input" th:field="${book.author.fullName}">
-                                <option th:each="author : ${authors}"
-                                        th:value="${author.fullName}"
-                                        th:text="${author.fullName}">
-                                </option>
-                            </select>&ndash;&gt;
-                        </div>-->
+
                         <div class="row w-50 h-25">
-                            <label class="form-label" for="products-input">Состав заказа</label>
+                            <label class="form-label" for="products-input">Состав заявки</label>
                             <select multiple="multiple" class="form-control form-select" id="products-input" th:field="*{products}">
                                 <option th:each="product : ${products}"
                                         th:value="${{product}}"
@@ -64,13 +60,14 @@
                                 </option>
                             </select>
                         </div>
+
                         <div class="row w-25">
-                            <label class="form-label" for="inputTotal">Общая стоимость</label>
-                            <input type="text" class="form-control rounded-0" id="inputTotal" readonly="readonly" name="total" th:value="${order.total}" >
+                            <label class="form-label" for="input-status">Статус заявки</label>
+                            <input type="text" class="form-control rounded-0 " id="input-status" readonly="readonly" name="status" th:value="${request.status}">
                         </div>
                         <div class="row w-25">
-                            <label class="form-label" for="input-car-brand">Статус заказа</label>
-                            <input type="text" class="form-control rounded-0 " id="input-status" readonly="readonly" name="status" th:value="${order.status}">
+                            <label class="form-label" for="input-comment">Комментарий</label>
+                            <input type="text" class="form-control rounded-0 " id="input-comment" readonly="readonly" name="comment" th:value="${request.comment}">
                         </div>
                         <div class="row w-25">
                             <button class="btn btn-primary mt-3 rounded-0 rounded-pill" type="submit">

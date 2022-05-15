@@ -1,32 +1,68 @@
 package ru.otus.finalproject.service.orders;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
-import ru.otus.finalproject.domain.Order;
-import ru.otus.finalproject.domain.OrderStatus;
+import ru.otus.finalproject.domain.*;
 import ru.otus.finalproject.exceptions.OrderException;
 import ru.otus.finalproject.repository.cars.CarRepository;
 import ru.otus.finalproject.repository.orders.OrderRepository;
 import ru.otus.finalproject.repository.products.ProductRepository;
+import ru.otus.finalproject.repository.user.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CarRepository carRepository;
+    private final UserRepository userRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, CarRepository carRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, CarRepository carRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.carRepository = carRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void createOrder(Order order) {
+    public void createOrder(Order order, Car car, User user) {
+        order.setCode(UUID.randomUUID().toString().replace("-",""));
+        order.setCar(car);
+        order.setUser(user);
+        order.setProducts(order.getProducts());//сделать проверку на фронте количество выбранных услуг иначе не создавать
+        order.setTotal(2000.00);//расчитывается в зависимости от стоимостей и количества услуг
         order.setStatus(OrderStatus.NEW.getRusName());
-        orderRepository.saveAndFlush(order);
+        order.setRequestId(0);
+        if(!orderRepository.existsOrderByCode(order.getCode())){
+            orderRepository.saveAndFlush(order);
+        }else {
+            throw new OrderException("order with code ["+ order.getCode() +"] is already exist!");
+        }
+    }
+
+    @Override
+    public void createOrderFromRequest(Request request) {
+        Order order = new Order();
+        order.setCode(UUID.randomUUID().toString().replace("-",""));
+        order.setCar(request.getCar());
+        order.setCustomerName(request.getFirstName());
+        order.setRequestId(request.getId());
+        List<Product> products = List.copyOf(request.getProducts());
+        order.setProducts(products);//сделать проверку на фронте количество выбранных услуг иначе не создавать
+        order.setTotal(2000.00);//расчитывается в зависимости от стоимостей и количества услуг
+        order.setStatus(OrderStatus.NEW.getRusName());
+        if(!orderRepository.existsOrderByCode(order.getCode())){
+            orderRepository.saveAndFlush(order);
+        }else {
+            throw new OrderException("order with code ["+ order.getCode() +"] is already exist!");
+        }
     }
 
     @Override
@@ -36,10 +72,9 @@ public class OrderServiceImpl implements OrderService{
         orderToBeUpdated.setStatus(order.getStatus());
         orderToBeUpdated.setTotal(order.getTotal());
         orderToBeUpdated.setCar(carRepository.findByBrand(order.getCar().getBrand()).get());
-        //orderToBeUpdated.setCarBrand(order.getCarBrand());
-        //orderToBeUpdated.setRequestId(order.getRequestId());
 
-        //orderToBeUpdated.setProducts();
+        Iterable<Long> productsIds = order.getProducts().stream().map(Product::getId).collect(Collectors.toList());
+        orderToBeUpdated.setProducts(productRepository.findAllById(productsIds));
 
         orderRepository.saveAndFlush(orderToBeUpdated);
     }
@@ -60,6 +95,17 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    public List<Order> getAllOrdersByUserPhone(String phone) {
+        return userRepository.findByPhone(phone).get().getOrders();
+    }
+
+    @PostFilter("filterObject.user.username == authentication.principal.username")
+    @Override
+    public List<Order> getAllOrdersByUserId(Long userId) {
+        return orderRepository.findAll();
+    }
+
+    @Override
     public Order getOrderByCode(String code) {
         return orderRepository.findOrderByCode(code).orElseThrow(()->new OrderException("Order with code [" + code + "] not found"));
     }
@@ -73,4 +119,17 @@ public class OrderServiceImpl implements OrderService{
     public void deleteOrderById(long id) {
         orderRepository.deleteById(id);
     }
+
+    @Override
+    public double getTotalSum(List<Order> orders) {
+        return 0;
+    }
+
+    @Override
+    public void setStatusByOrderId(long id, String status) {
+        Order order = this.getOrderById(id);
+        order.setStatus(status);
+        this.updateOrderById(id,order);
+    }
+
 }
