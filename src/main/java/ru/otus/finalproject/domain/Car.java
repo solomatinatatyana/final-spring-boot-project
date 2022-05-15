@@ -20,12 +20,8 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //@NotBlank(message = "Поле обязательное и не может быть пустым")
     @Column(name = "brand")
     private String brand;
-
-    /*@Column(name = "model")
-    private String model;*/
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "car")

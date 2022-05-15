@@ -11,6 +11,10 @@ import ru.otus.finalproject.domain.Car;
 import ru.otus.finalproject.domain.Order;
 import ru.otus.finalproject.domain.Product;
 import ru.otus.finalproject.domain.User;
+import ru.otus.finalproject.rest.dto.OrderDto;
+import ru.otus.finalproject.rest.mappers.CarMapper;
+import ru.otus.finalproject.rest.mappers.OrderMapper;
+import ru.otus.finalproject.rest.mappers.ProductMapper;
 import ru.otus.finalproject.service.cars.CarService;
 import ru.otus.finalproject.service.orders.OrderService;
 import ru.otus.finalproject.service.products.ProductService;
@@ -32,11 +36,20 @@ public class OrderController {
     private final CarService carService;
     private final UserService userService;
 
-    public OrderController(OrderService orderService, ProductService productService, CarService carService, UserService userService) {
+    private final OrderMapper orderMapper;
+    private final ProductMapper productMapper;
+    private final CarMapper carMapper;
+
+
+    public OrderController(OrderService orderService, ProductService productService, CarService carService, UserService userService,
+                           OrderMapper orderMapper, ProductMapper productMapper, CarMapper carMapper) {
         this.orderService = orderService;
         this.productService = productService;
         this.carService = carService;
         this.userService = userService;
+        this.orderMapper = orderMapper;
+        this.productMapper = productMapper;
+        this.carMapper = carMapper;
     }
 
     @GetMapping(value = "/order")
@@ -94,12 +107,12 @@ public class OrderController {
     //@Timed(PATCH_AUTHOR_REQ_TIME)
     @PatchMapping(value = "/order/{id}")
     public String saveOrder(@PathVariable("id") long id,
-                              @ModelAttribute("order") @Valid Order order, BindingResult result){
+                            @ModelAttribute("order") @Valid OrderDto orderDto, BindingResult result){
         //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
         if(result.hasErrors()){
             return "order-edit";
         }
-        orderService.updateOrderById(id,order);
+        orderService.updateOrderById(id, orderMapper.toOrder(orderDto));
         return "redirect:/order";
     }
 
@@ -117,7 +130,6 @@ public class OrderController {
         model.addAttribute("cars", carList);
         model.addAttribute("products",productList);
         model.addAttribute("order",new Order());
-        //model.addAttribute("order",new Order());
         return "order-add";
     }
 
@@ -135,7 +147,7 @@ public class OrderController {
         Car car1 = carService.getCarByBrand(brand);
         User user = userService.getUserByName(username);
 
-        orderService.createOrder(order,car1,user);
+        orderService.createOrder(order, car1,user);
         return "redirect:/order/my-orders";
     }
 

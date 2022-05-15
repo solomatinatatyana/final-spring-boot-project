@@ -3,14 +3,10 @@ package ru.otus.finalproject.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.util.List;
 
 @Data
@@ -57,7 +53,6 @@ public class Order {
     @JoinTable(name = "orders_products",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-    @Setter
     private List<Product> products;
 
     public Order(long id, String code, Car car, User user) {

@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.finalproject.domain.User;
+import ru.otus.finalproject.rest.dto.UserDto;
+import ru.otus.finalproject.rest.mappers.UserMapper;
 import ru.otus.finalproject.service.users.UserService;
 
 import javax.validation.Valid;
@@ -16,9 +18,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
 
@@ -57,7 +61,7 @@ public class UserController {
     //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
     @GetMapping(value = "/user/{id}/edit")
     public String editUser(@PathVariable("id") long id, Model model){
-        User user = userService.getUserById(id);
+        UserDto user = userMapper.toUserDto(userService.getUserById(id));
         model.addAttribute("user", user);
         return "user-edit";
     }
@@ -74,19 +78,11 @@ public class UserController {
     //@Timed(PATCH_AUTHOR_REQ_TIME)
     @PatchMapping(value = "/user/{id}")
     public String saveRequest(@PathVariable("id") long id,
-                              @ModelAttribute("user") @Valid User user, BindingResult result){
-        //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
+                              @ModelAttribute("user") @Valid UserDto user, BindingResult result){
         if(result.hasErrors()){
             return "user-edit";
         }
-        userService.updateUserById(id,user);
+        userService.updateUserById(id,userMapper.toUser(user));
         return "user-info";
     }
-
-    //@Timed(DELETE_AUTHOR_REQ_TIME)
-    /*@DeleteMapping(value = "/user/{id}")
-    public String deleteRequset(@PathVariable("id") long id){
-        requestService.deleteRequestById(id);
-        return "redirect:/request";
-    }*/
 }

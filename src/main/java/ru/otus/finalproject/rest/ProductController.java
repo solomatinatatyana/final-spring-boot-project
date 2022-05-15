@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.finalproject.domain.Product;
+import ru.otus.finalproject.rest.dto.ProductDto;
+import ru.otus.finalproject.rest.mappers.ProductMapper;
 import ru.otus.finalproject.service.products.ProductService;
 
 import javax.validation.Valid;
@@ -16,9 +18,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
+        this.productMapper = productMapper;
     }
 
     //@Timed(GET_AUTHORS_REQ_TIME)
@@ -40,12 +44,11 @@ public class ProductController {
     //@Timed(PATCH_AUTHOR_REQ_TIME)
     @PatchMapping(value = "/product/{id}")
     public String saveProduct(@PathVariable("id") long id,
-                             @ModelAttribute("product") @Valid Product product, BindingResult result){
-        //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
+                              @ModelAttribute("product") @Valid ProductDto productDto, BindingResult result){
         if(result.hasErrors()){
             return "product-edit";
         }
-        productService.updateProductById(id,product);
+        productService.updateProductById(id, productMapper.toProduct(productDto));
         return "redirect:/product";
     }
 
@@ -57,12 +60,11 @@ public class ProductController {
 
     //@Timed(CREATE_AUTHOR_REQ_TIME)
     @PostMapping(value = "/product")
-    public String createProduct(@ModelAttribute("product") @Valid Product product, BindingResult result){
-        //authorService.insertAuthor(authorMapper.toAuthor(author));
+    public String createProduct(@ModelAttribute("product") @Valid ProductDto productDto, BindingResult result){
         if(result.hasErrors()){
             return "product-add";
         }
-        productService.createProduct(product);
+        productService.createProduct(productMapper.toProduct(productDto));
         return "redirect:/product";
     }
 

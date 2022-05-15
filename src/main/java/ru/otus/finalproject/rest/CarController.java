@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.finalproject.domain.Car;
+import ru.otus.finalproject.rest.dto.CarDto;
+import ru.otus.finalproject.rest.mappers.CarMapper;
 import ru.otus.finalproject.service.cars.CarService;
 
 import javax.validation.Valid;
@@ -13,13 +15,15 @@ import java.util.List;
 @Controller
 public class CarController {
     private final CarService carService;
+    private final CarMapper carMapper;
 
-    public CarController(CarService carService) {
+    public CarController(CarService carService, CarMapper carMapper) {
         this.carService = carService;
+        this.carMapper = carMapper;
     }
 
     //@Timed(GET_AUTHORS_REQ_TIME)
-    @GetMapping(value = "/admin/car")
+    @GetMapping(value = "/admin/car" )
     public String getCars(Model model){
         List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
@@ -37,20 +41,18 @@ public class CarController {
     //@Timed(PATCH_AUTHOR_REQ_TIME)
     @PatchMapping(value = "/admin/car/{id}")
     public String saveCar(@PathVariable("id") long id,
-                              @ModelAttribute("car") @Valid Car car, BindingResult result){
-        //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
+                          @ModelAttribute("car") @Valid CarDto carDto, BindingResult result){
         if(result.hasErrors()){
             return "car-dictionary";
         }
-        carService.updateCarById(id,car);
+        carService.updateCarById(id, carMapper.toCar(carDto));
         return "redirect:/admin/car";
     }
 
     //@Timed(CREATE_AUTHOR_REQ_TIME)
     @PostMapping(value = "/admin/car")
-    public String createCar(@ModelAttribute("car") @Valid Car car){
-        //authorService.insertAuthor(authorMapper.toAuthor(author));
-        carService.createCar(car);
+    public String createCar(@ModelAttribute("car") @Valid CarDto carDto){
+        carService.createCar(carMapper.toCar(carDto));
         return "redirect:/admin/car";
     }
 

@@ -14,6 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "requests")
+@NamedEntityGraph(name = "request-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode("car")
+        })
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

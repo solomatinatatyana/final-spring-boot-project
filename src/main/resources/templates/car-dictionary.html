@@ -37,7 +37,7 @@
             </div>
             <form th:action="@{/admin/car}" th:method="post" action="car-dictionary.html">
                 <div class="input-group mb-3 w-25">
-                    <input class="form-control" placeholder="input your car's brand" type="text", name="brand" id="car-brand"/>
+                    <input class="form-control" placeholder="input your car's brand" type="text" required="required" name="brand" id="car-brand"/>
                     <button class="btn btn-primary btn-sm" type="submit">Создать</button>
                 </div>
             </form>

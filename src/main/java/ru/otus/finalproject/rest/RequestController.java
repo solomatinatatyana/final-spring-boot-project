@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.otus.finalproject.domain.Car;
 import ru.otus.finalproject.domain.Product;
 import ru.otus.finalproject.domain.Request;
+import ru.otus.finalproject.rest.dto.RequestDto;
+import ru.otus.finalproject.rest.mappers.CarMapper;
+import ru.otus.finalproject.rest.mappers.OrderMapper;
+import ru.otus.finalproject.rest.mappers.ProductMapper;
+import ru.otus.finalproject.rest.mappers.RequestMapper;
 import ru.otus.finalproject.service.cars.CarService;
 import ru.otus.finalproject.service.orders.OrderService;
 import ru.otus.finalproject.service.products.ProductService;
@@ -25,12 +30,21 @@ public class RequestController {
     private final ProductService productService;
     private final CarService carService;
     private final OrderService orderService;
+    private final RequestMapper requestMapper;
+    private final ProductMapper productMapper;
+    private final CarMapper carMapper;
+    private final OrderMapper orderMapper;
 
-    public RequestController(RequestService requestService, ProductService productService, CarService carService, OrderService orderService) {
+    public RequestController(RequestService requestService, ProductService productService, CarService carService, OrderService orderService,
+                             RequestMapper requestMapper, ProductMapper productMapper, CarMapper carMapper, OrderMapper orderMapper) {
         this.requestService = requestService;
         this.productService = productService;
         this.carService = carService;
         this.orderService = orderService;
+        this.requestMapper = requestMapper;
+        this.productMapper = productMapper;
+        this.carMapper = carMapper;
+        this.orderMapper = orderMapper;
     }
 
     @GetMapping(value = "/request")
@@ -78,16 +92,10 @@ public class RequestController {
         return "redirect:/request";
     }
 
-   /* @GetMapping(value = "/")
-    public String request(Model model){
-        model.addAttribute("cars",productService.getAllProducts());
-        return "index";
-    }*/
-
 
     //@Timed(CREATE_AUTHOR_REQ_TIME)
     @PostMapping(value = "/request")
-    public String createRequest( @Valid @ModelAttribute("request") Request request,
+    public String createRequest( @Valid @ModelAttribute("request") RequestDto request,
                               String brand, Model model){
         //authorService.insertAuthor(authorMapper.toAuthor(author));
        /* if(result.hasErrors()){
@@ -95,7 +103,7 @@ public class RequestController {
         }*/
         Car car = carService.getCarByBrand(brand);
 
-        requestService.createRequest(request,car);
+        requestService.createRequest(requestMapper.toRequest(request), car);
         return "redirect:/";
     }
 
