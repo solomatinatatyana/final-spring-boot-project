@@ -26,7 +26,7 @@ public class Product {
 
     @PositiveOrZero(message = "Цена должна быть неотрицательным числом")
     @Column(name = "price")
-    private String price;
+    private double price;
 
     public Product(long id) {
         this.id = id;

@@ -20,6 +20,6 @@ public interface OrderService {
     List<Order> getAllOrders();
     void deleteOrderById(long id);
 
-    double getTotalSum(List<Order> orders);
+    double getTotalSum(List<Product> products);
     void setStatusByOrderId(long id, String status);
 }

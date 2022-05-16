@@ -73,8 +73,8 @@ public class OrderController {
         }else if(userId!=null && userId!=0) {
             orders = orderService.getAllOrdersByUserId(userId);
         }else {
-            //orders = Collections.emptyList();
-            orders = orderService.getAllOrders();
+            orders = Collections.emptyList();
+            //orders = orderService.getAllOrders();
         }
         model.addAttribute("orders", orders);
         return "order-list";

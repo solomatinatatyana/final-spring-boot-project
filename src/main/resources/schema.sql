@@ -5,6 +5,9 @@ DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS requests;
 DROP TABLE IF EXISTS cars;
+DROP TABLE IF EXISTS models;
+DROP TABLE IF EXISTS brands;
+
 
 create table detailing_users(
     id bigint AUTO_INCREMENT primary key,
@@ -17,16 +20,27 @@ create table detailing_users(
     unique key unique_uk_1(phone)
 );
 
+create table models(
+    id bigint AUTO_INCREMENT primary key ,
+    model varchar(50)
+);
+
+create table brands(
+    id bigint AUTO_INCREMENT primary key ,
+    brand varchar(255),
+    model_id bigint references models(id)
+);
+
 create table cars(
     id bigint AUTO_INCREMENT primary key ,
-    brand varchar (255)
+    brand varchar(255)
 );
 
 create table products(
     id bigint AUTO_INCREMENT primary key ,
     product_name varchar (255),
     description varchar (8000),
-    price int(20)
+    price double(20)
 );
 
 create table requests(
@@ -56,7 +70,6 @@ create table orders_products (
     FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
-
 
 
 create table requests_products (

@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService{
         order.setCar(car);
         order.setUser(user);
         order.setProducts(order.getProducts());//сделать проверку на фронте количество выбранных услуг иначе не создавать
-        order.setTotal(2000.00);//расчитывается в зависимости от стоимостей и количества услуг
+        order.setTotal(getTotalSum(order.getProducts()));//расчитывается в зависимости от стоимостей и количества услуг
         order.setStatus(OrderStatus.NEW.getRusName());
         order.setRequestId(0);
         if(!orderRepository.existsOrderByCode(order.getCode())){
@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService{
         order.setRequestId(request.getId());
         List<Product> products = List.copyOf(request.getProducts());
         order.setProducts(products);//сделать проверку на фронте количество выбранных услуг иначе не создавать
-        order.setTotal(2000.00);//расчитывается в зависимости от стоимостей и количества услуг
+        order.setTotal(getTotalSum(request.getProducts()));//расчитывается в зависимости от стоимостей и количества услуг
         order.setStatus(OrderStatus.NEW.getRusName());
         if(!orderRepository.existsOrderByCode(order.getCode())){
             orderRepository.saveAndFlush(order);
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService{
         Order orderToBeUpdated = getOrderById(id);
         orderToBeUpdated.setCode(order.getCode());
         orderToBeUpdated.setStatus(order.getStatus());
-        orderToBeUpdated.setTotal(order.getTotal());
+        orderToBeUpdated.setTotal(getTotalSum(order.getProducts()));
         orderToBeUpdated.setCar(carRepository.findByBrand(order.getCar().getBrand()).get());
 
         Iterable<Long> productsIds = order.getProducts().stream().map(Product::getId).collect(Collectors.toList());
@@ -121,8 +121,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public double getTotalSum(List<Order> orders) {
-        return 0;
+    public double getTotalSum(List<Product> products) {
+        return products.stream().mapToDouble(Product::getPrice).sum();
     }
 
     @Override
