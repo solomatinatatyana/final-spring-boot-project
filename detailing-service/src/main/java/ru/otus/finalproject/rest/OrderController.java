@@ -67,16 +67,16 @@ public class OrderController {
         }else if(brand!=null && !brand.isEmpty()){
             orders = orderService.getAllOrdersByCarBrand(brand);
         } else if(status!=null && !status.isEmpty()){
-        orders = orderService.getAllOrdersByStatus(status);
+            orders = orderService.getAllOrdersByStatus(status);
         }else if(phone!=null && !phone.isEmpty()) {
             orders = orderService.getAllOrdersByUserPhone(phone);
         }else if(userId!=null && userId!=0) {
             orders = orderService.getAllOrdersByUserId(userId);
         }else {
-            orders = Collections.emptyList();
-            //orders = orderService.getAllOrders();
+            orders = orderService.getAllOrders();
         }
         model.addAttribute("orders", orders);
+        orders.forEach(order -> order.setTotal(orderService.getTotalSum(order.getProducts())));
         return "order-list";
     }
 
@@ -88,6 +88,7 @@ public class OrderController {
         User user = userService.getUserByName(username);
         orders = orderService.getAllOrdersByUserId(user.getId());
         model.addAttribute("orders", orders);
+        orders.forEach(order -> order.setTotal(orderService.getTotalSum(order.getProducts())));
         return "my-order-list";
     }
 

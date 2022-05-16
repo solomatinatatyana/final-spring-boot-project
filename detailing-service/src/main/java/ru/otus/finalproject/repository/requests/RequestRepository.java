@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request,Long> {
     List<Request> findRequestByStatus(String status);
+    List<Request> findRequestByPhone(String phone);
+    List<Request> findRequestByFirstName(String firstName);
 
     @EntityGraph(value = "request-entity-graph")
     List<Request> findAll();

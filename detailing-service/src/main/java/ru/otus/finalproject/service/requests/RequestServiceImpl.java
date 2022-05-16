@@ -67,12 +67,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> getAllRequestsByPhone(String phone) {
-        return null;
+        return requestRepository.findRequestByPhone(phone);
     }
 
     @Override
     public List<Request> getAllRequestsByCustomerName(String customerName) {
-        return null;
+        return requestRepository.findRequestByFirstName(customerName);
     }
 
     @Override

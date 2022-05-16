@@ -10,7 +10,6 @@ import ru.otus.finalproject.repository.orders.OrderRepository;
 import ru.otus.finalproject.repository.products.ProductRepository;
 import ru.otus.finalproject.repository.user.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -131,5 +130,4 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus(status);
         this.updateOrderById(id,order);
     }
-
 }

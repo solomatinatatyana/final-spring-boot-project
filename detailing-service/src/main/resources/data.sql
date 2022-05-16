@@ -46,10 +46,10 @@ insert into authorities(username, roles) values ('admin', 'ADMIN'),
                                                 ('manager', 'MANAGER'),
                                                 ('user','USER');
 
-insert into orders(code, car_brand_id, status, total, user_id, request_id) values ('QWERTY',1,'Новый',2000,3,0),
-                                                                      ('QWERTY2',3,'Новый',1000,2,0),
-                                                                      ('QWERTY3',7,'Активный',1000,1,0),
-                                                                      ('QWERTY4',3,'Завершен',1000,3,0);
+insert into orders(code, car_brand_id, status, user_id, request_id) values ('QWERTY',1,'Новый',3,0),
+                                                                      ('QWERTY2',3,'Новый',2,0),
+                                                                      ('QWERTY3',7,'Активный',1,0),
+                                                                      ('QWERTY4',3,'Завершен',3,0);
 
 insert into orders_products(order_id, product_id) values (1,1),
                                                          (1,3),
