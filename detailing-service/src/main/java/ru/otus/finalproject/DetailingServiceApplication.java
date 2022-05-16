@@ -6,10 +6,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class FinalSpringBootProjectApplication {
+public class DetailingServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FinalSpringBootProjectApplication.class, args);
+        SpringApplication.run(DetailingServiceApplication.class, args);
     }
 
 }

@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Page Not Found</title>
+    <title>Forbidden</title>
 </head>
 <body>
-<h3>404 Not Found</h3>
+<h3>Доступ запрещен!</h3>
 <p th:if="${error != null}" th:text="${error}"></p>
-<a href="/" th:href="@{/}">Back to Home Page</a>
+<a href="/src/main/resources" th:href="@{/src/main/resources}">Back to Home Page</a>
 </body>
 </html>
