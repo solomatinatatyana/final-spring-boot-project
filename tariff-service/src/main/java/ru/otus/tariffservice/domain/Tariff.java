@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,6 @@ public class Tariff {
     private String brand;
 
     @Column(name = "tariff")
-    private String tariff;
+    private BigDecimal tariff;
 
 }

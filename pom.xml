@@ -9,6 +9,7 @@
     <modules>
         <module>detailing-service</module>
         <module>tariff-service</module>
+        <module>calculator-costs-service</module>
     </modules>
 
 </project>
