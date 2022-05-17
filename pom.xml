@@ -10,6 +10,7 @@
         <module>detailing-service</module>
         <module>tariff-service</module>
         <module>calculator-costs-service</module>
+        <module>configuration-server</module>
     </modules>
 
 </project>
