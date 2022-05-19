@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 import ru.otus.finalproject.domain.*;
+import ru.otus.finalproject.dto.ProductPriceVO;
 import ru.otus.finalproject.exceptions.OrderException;
+import ru.otus.finalproject.feign.ProductPriceCalculatorServiceProxy;
 import ru.otus.finalproject.repository.cars.CarRepository;
 import ru.otus.finalproject.repository.orders.OrderRepository;
 import ru.otus.finalproject.repository.products.ProductRepository;
@@ -22,12 +24,14 @@ public class OrderServiceImpl implements OrderService{
     private final ProductRepository productRepository;
     private final CarRepository carRepository;
     private final UserRepository userRepository;
+    private final ProductPriceCalculatorServiceProxy feignProxy;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, CarRepository carRepository, UserRepository userRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, CarRepository carRepository, UserRepository userRepository, ProductPriceCalculatorServiceProxy feignProxy) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.carRepository = carRepository;
         this.userRepository = userRepository;
+        this.feignProxy = feignProxy;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class OrderServiceImpl implements OrderService{
         order.setCar(car);
         order.setUser(user);
         order.setProducts(order.getProducts());//сделать проверку на фронте количество выбранных услуг иначе не создавать
-        order.setTotal(getTotalSum(order.getProducts()));//расчитывается в зависимости от стоимостей и количества услуг
+        order.setTotal(getTotalSumWithTariff(order.getProducts(),car.getBrand()));
         order.setStatus(OrderStatus.NEW.getRusName());
         order.setRequestId(0);
         if(!orderRepository.existsOrderByCode(order.getCode())){
@@ -55,7 +59,7 @@ public class OrderServiceImpl implements OrderService{
         order.setRequestId(request.getId());
         List<Product> products = List.copyOf(request.getProducts());
         order.setProducts(products);//сделать проверку на фронте количество выбранных услуг иначе не создавать
-        order.setTotal(getTotalSum(request.getProducts()));//расчитывается в зависимости от стоимостей и количества услуг
+        order.setTotal(getTotalSumWithTariff(order.getProducts(),request.getCar().getBrand()));
         order.setStatus(OrderStatus.NEW.getRusName());
         if(!orderRepository.existsOrderByCode(order.getCode())){
             orderRepository.saveAndFlush(order);
@@ -69,7 +73,7 @@ public class OrderServiceImpl implements OrderService{
         Order orderToBeUpdated = getOrderById(id);
         orderToBeUpdated.setCode(order.getCode());
         orderToBeUpdated.setStatus(order.getStatus());
-        orderToBeUpdated.setTotal(getTotalSum(order.getProducts()));
+        orderToBeUpdated.setTotal(getTotalSumWithTariff(order.getProducts(),order.getCar().getBrand()));
         orderToBeUpdated.setCar(carRepository.findByBrand(order.getCar().getBrand()).get());
 
         Iterable<Long> productsIds = order.getProducts().stream().map(Product::getId).collect(Collectors.toList());
@@ -119,8 +123,19 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.deleteById(id);
     }
 
+    public double getProductCost(String product, String brand) {
+        ProductPriceVO cost = feignProxy.getPrice(product, brand);
+        return cost.getPrice();
+    }
+
     @Override
     public double getTotalSum(List<Product> products) {
+        return products.stream().mapToDouble(Product::getPrice).sum();
+    }
+
+    @Override
+    public double getTotalSumWithTariff(List<Product> products, String brand) {
+        products.forEach(product -> product.setPrice(this.getProductCost(product.getProductName(),brand)));
         return products.stream().mapToDouble(Product::getPrice).sum();
     }
 

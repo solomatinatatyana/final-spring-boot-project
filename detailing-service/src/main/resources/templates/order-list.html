@@ -38,8 +38,6 @@
                     <input class="form-control" style="width: 25px" placeholder="input order's car brand" type="text" name="brand" aria-describedby="button"/>
                     <input class="form-control" style="width: 25px" placeholder="input order's status" type="text" name="status" aria-describedby="button"/>
                     <input class="form-control" style="width: 25px" placeholder="input user's phone" type="text" name="phone" aria-describedby="button"/>
-                    <input class="form-control" style="width: 25px" placeholder="input user's user id" type="text" name="userId" aria-describedby="button"/>
-                    <input class="form-control" style="width: 25px" placeholder="input book's genre" type="text" name="genre" aria-describedby="button"/>
                     <button class="btn btn-primary btn-sm" type="submit" id="button">Найти</button>
                 </div>
             </form>
@@ -72,6 +70,9 @@
                         </a>
                         <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/order/{id}/cancel(id=${order.id})}" th:method="post">
                             <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Отменить</button>
+                        </form>
+                        <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/order/{id}/approve(id=${order.id})}" th:method="post">
+                            <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Подтвердить</button>
                         </form>
                         <form sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:action="@{/order/{id}/close(id=${order.id})}" th:method="post">
                             <button class="mt-1 main-button btn btn-sm btn-secondary" type="submit">Завершить</button>

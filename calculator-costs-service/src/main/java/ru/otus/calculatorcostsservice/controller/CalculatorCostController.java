@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 @RestController
-@RequestMapping(value = "/cost/{product}/tariff/{brand}")
+@RequestMapping(value = "/cost/{product}/brand/{brand}")
 public class CalculatorCostController {
     private final ProductPriceService productPriceService;
 

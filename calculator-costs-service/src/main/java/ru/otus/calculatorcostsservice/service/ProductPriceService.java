@@ -1,24 +1,24 @@
 package ru.otus.calculatorcostsservice.service;
 
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ru.otus.calculatorcostsservice.domain.ProductPrice;
 import ru.otus.calculatorcostsservice.domain.TariffVO;
+import ru.otus.calculatorcostsservice.feign.TariffBrandServiceProxy;
 import ru.otus.calculatorcostsservice.repository.ProductPriceRepository;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
+@Slf4j
 @Service
 public class ProductPriceService {
-    private final ProductPriceRepository productPriceRepository;
-    private final RestTemplate restTemplate;
 
-    public ProductPriceService(ProductPriceRepository productPriceRepository, RestTemplate restTemplate) {
+    private final ProductPriceRepository productPriceRepository;
+    private final TariffBrandServiceProxy feignProxy;
+
+    public ProductPriceService(ProductPriceRepository productPriceRepository, TariffBrandServiceProxy feignProxy) {
         this.productPriceRepository = productPriceRepository;
-        this.restTemplate = restTemplate;
+        this.feignProxy = feignProxy;
     }
 
     public ProductPrice getProductPriceByProduct(String productName) {
@@ -26,12 +26,7 @@ public class ProductPriceService {
     }
 
     public BigDecimal getTariff(String brand) {
-        RestTemplate restTemplate = new RestTemplate();
-        Map<String, String> urlPathVariables = new HashMap<>();
-        urlPathVariables.put("brand", brand);
-        ResponseEntity<TariffVO> responseEntity = restTemplate.getForEntity(
-                "http://localhost:8002/tariff/brand/{brand}", TariffVO.class, urlPathVariables);
-        TariffVO converter = responseEntity.getBody();
-        return converter.getTariff();
+        TariffVO tariff = feignProxy.getTariff(brand);
+        return tariff.getTariff();
     }
 }

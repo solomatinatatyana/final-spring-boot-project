@@ -24,8 +24,7 @@ import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.otus.finalproject.domain.OrderStatus.CANCELED;
-import static ru.otus.finalproject.domain.OrderStatus.DONE;
+import static ru.otus.finalproject.domain.OrderStatus.*;
 
 @Slf4j
 @Controller
@@ -72,11 +71,12 @@ public class OrderController {
             orders = orderService.getAllOrdersByUserPhone(phone);
         }else if(userId!=null && userId!=0) {
             orders = orderService.getAllOrdersByUserId(userId);
-        }else {
+        }else{
             orders = orderService.getAllOrders();
         }
         model.addAttribute("orders", orders);
-        orders.forEach(order -> order.setTotal(orderService.getTotalSum(order.getProducts())));
+        if(!orders.isEmpty())
+            orders.forEach(order -> order.setTotal(orderService.getTotalSumWithTariff(order.getProducts(),order.getCar().getBrand())));
         return "order-list";
     }
 
@@ -88,7 +88,7 @@ public class OrderController {
         User user = userService.getUserByName(username);
         orders = orderService.getAllOrdersByUserId(user.getId());
         model.addAttribute("orders", orders);
-        orders.forEach(order -> order.setTotal(orderService.getTotalSum(order.getProducts())));
+        orders.forEach(order -> order.setTotal(orderService.getTotalSumWithTariff(order.getProducts(),order.getCar().getBrand())));
         return "my-order-list";
     }
 
@@ -140,7 +140,6 @@ public class OrderController {
                               String brand,
                               String username,
                               BindingResult result, Model model){
-        //authorService.insertAuthor(authorMapper.toAuthor(author));
         if(result.hasErrors()){
             return "order-add";
         }
@@ -162,6 +161,12 @@ public class OrderController {
     @PostMapping(value = "/order/{id}/cancel")
     public String cancelOrder(@PathVariable("id") long id){
         orderService.setStatusByOrderId(id, CANCELED.getRusName());
+        return "redirect:/order";
+    }
+
+    @PostMapping(value = "/order/{id}/approve")
+    public String approveRequest(@PathVariable("id") long id){
+        orderService.setStatusByOrderId(id, ACTIVE.getRusName());
         return "redirect:/order";
     }
 

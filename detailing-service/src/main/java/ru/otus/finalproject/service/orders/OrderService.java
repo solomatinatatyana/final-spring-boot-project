@@ -21,5 +21,6 @@ public interface OrderService {
     void deleteOrderById(long id);
 
     double getTotalSum(List<Product> products);
+    double getTotalSumWithTariff(List<Product> products, String brand);
     void setStatusByOrderId(long id, String status);
 }

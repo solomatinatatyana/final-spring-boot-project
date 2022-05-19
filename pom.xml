@@ -11,6 +11,7 @@
         <module>tariff-service</module>
         <module>calculator-costs-service</module>
         <module>configuration-server</module>
+        <module>eureka-server</module>
     </modules>
 
 </project>
