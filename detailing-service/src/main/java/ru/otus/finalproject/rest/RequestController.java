@@ -1,5 +1,6 @@
 package ru.otus.finalproject.rest;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static ru.otus.finalproject.domain.RequestStatus.*;
+import static ru.otus.finalproject.metrics.Metrics.Requests.*;
 
 @Slf4j
 @Controller
@@ -47,6 +49,7 @@ public class RequestController {
         this.orderMapper = orderMapper;
     }
 
+    @Timed(GET_REQUESTS_REQ_TIME)
     @GetMapping(value = "/request")
     public String getRequests(
             @RequestParam(required = false, name = "fio") String firstName,
@@ -62,13 +65,12 @@ public class RequestController {
             requests = requestService.getAllRequestsByPhone(phone);
         }else{
             requests = requestService.getAllRequestsByStatus(NEW.getRusName());
-            //requests = requestService.getAllRequests();
         }
         model.addAttribute("requests", requests);
         return "request-list";
     }
 
-    //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
+    @Timed(GET_REQUEST_EDIT_REQ_TIME)
     @GetMapping(value = "/request/{id}/edit")
     public String editRequest(@PathVariable("id") long id, Model model){
         Request request = requestService.getRequestById(id);
@@ -80,11 +82,10 @@ public class RequestController {
         return "request-edit";
     }
 
-    //@Timed(PATCH_AUTHOR_REQ_TIME)
+    @Timed(PATCH_REQUEST_REQ_TIME)
     @PatchMapping(value = "/request/{id}")
     public String saveRequest(@PathVariable("id") long id,
                             @ModelAttribute("request") @Valid Request request, BindingResult result){
-        //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
         if(result.hasErrors()){
             return "request-edit";
         }
@@ -93,33 +94,31 @@ public class RequestController {
     }
 
 
-    //@Timed(CREATE_AUTHOR_REQ_TIME)
+    @Timed(CREATE_REQUEST_REQ_TIME)
     @PostMapping(value = "/request")
     public String createRequest( @Valid @ModelAttribute("request") RequestDto request,
                               String brand, Model model){
-        //authorService.insertAuthor(authorMapper.toAuthor(author));
-       /* if(result.hasErrors()){
-            return "request-add";
-        }*/
         Car car = carService.getCarByBrand(brand);
 
         requestService.createRequest(requestMapper.toRequest(request), car);
         return "redirect:/";
     }
 
-    //@Timed(DELETE_AUTHOR_REQ_TIME)
+    @Timed(DELETE_REQUEST_REQ_TIME)
     @DeleteMapping(value = "/request/{id}")
-    public String deleteRequset(@PathVariable("id") long id){
+    public String deleteRequest(@PathVariable("id") long id){
         requestService.deleteRequestById(id);
         return "redirect:/request";
     }
 
+    @Timed(CANCEL_REQUEST_REQ_TIME)
     @PostMapping(value = "/request/{id}/cancel")
     public String cancelRequest(@PathVariable("id") long id){
         requestService.setStatusByRequestId(id, CANCELED.getRusName());
         return "redirect:/request";
     }
 
+    @Timed(APPROVE_REQUEST_REQ_TIME)
     @PostMapping(value = "/request/{id}/approve")
     public String approveRequest(@PathVariable("id") long id){
         requestService.setStatusByRequestId(id, APPROVED.getRusName());

@@ -1,5 +1,6 @@
 package ru.otus.finalproject.rest;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,8 @@ import ru.otus.finalproject.service.products.ProductService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.otus.finalproject.metrics.Metrics.Products.*;
+
 @Slf4j
 @Controller
 public class ProductController {
@@ -25,7 +28,7 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
-    //@Timed(GET_AUTHORS_REQ_TIME)
+    @Timed(GET_PRODUCTS_REQ_TIME)
     @GetMapping(value = "/product")
     public String getProducts(Model model){
         List<Product> products = productService.getAllProducts();
@@ -33,7 +36,7 @@ public class ProductController {
         return "product-list";
     }
 
-    //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
+    @Timed(GET_PRODUCT_EDIT_REQ_TIME)
     @GetMapping(value = "/product/{id}/edit")
     public String editProduct(@PathVariable("id") long id, Model model){
         Product product = productService.getProductById(id);
@@ -41,7 +44,7 @@ public class ProductController {
         return "product-edit";
     }
 
-    //@Timed(PATCH_AUTHOR_REQ_TIME)
+    @Timed(PATCH_PRODUCT_REQ_TIME)
     @PatchMapping(value = "/product/{id}")
     public String saveProduct(@PathVariable("id") long id,
                               @ModelAttribute("product") @Valid ProductDto productDto, BindingResult result){
@@ -52,13 +55,14 @@ public class ProductController {
         return "redirect:/product";
     }
 
+    @Timed(GET_PRODUCT_ADD_REQ_TIME)
     @GetMapping(value = "/product/add")
     public String showAddProductForm(Model model){
         model.addAttribute("product",new Product());
         return "product-add";
     }
 
-    //@Timed(CREATE_AUTHOR_REQ_TIME)
+    @Timed(CREATE_PRODUCT_REQ_TIME)
     @PostMapping(value = "/product")
     public String createProduct(@ModelAttribute("product") @Valid ProductDto productDto, BindingResult result){
         if(result.hasErrors()){
@@ -68,7 +72,7 @@ public class ProductController {
         return "redirect:/product";
     }
 
-    //@Timed(DELETE_AUTHOR_REQ_TIME)
+    @Timed(DELETE_PRODUCT_REQ_TIME)
     @DeleteMapping(value = "/product/{id}")
     public String deleteProduct(@PathVariable("id") long id){
         productService.deleteProductById(id);

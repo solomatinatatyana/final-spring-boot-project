@@ -1,8 +1,8 @@
 package ru.otus.finalproject.rest;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +15,9 @@ import ru.otus.finalproject.service.products.ProductService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.otus.finalproject.metrics.Metrics.ProductCost.CALCULATE_PRODUCT_COST_REQ_TIME;
+import static ru.otus.finalproject.metrics.Metrics.ProductCost.GET_PRODUCT_COST_REQ_TIME;
 
 @Controller
 public class ProductCostController {
@@ -29,16 +32,18 @@ public class ProductCostController {
         this.orderService = orderService;
     }
 
+    @Timed(GET_PRODUCT_COST_REQ_TIME)
     @GetMapping(value = "/product/cost")
-    public String mainPage(Model model){
+    public String productCostPage(Model model){
         model.addAttribute("products",productService.getAllProducts());
         model.addAttribute("cars",carService.getAllCars());
         return "calculate-cost-form";
     }
 
+    @Timed(CALCULATE_PRODUCT_COST_REQ_TIME)
     @PostMapping(value = "/product/cost")
     public String calculateProductsCost(@ModelAttribute("productCost") ProductCost productCost,
-                                        BindingResult result, Model model){
+                                        Model model){
 
         List<Product> productList = productService.getAllProducts();
         List<Car> carList = carService.getAllCars();

@@ -1,5 +1,6 @@
 package ru.otus.finalproject.rest;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.otus.finalproject.domain.OrderStatus.*;
+import static ru.otus.finalproject.metrics.Metrics.Orders.*;
 
 @Slf4j
 @Controller
@@ -51,6 +53,7 @@ public class OrderController {
         this.carMapper = carMapper;
     }
 
+    @Timed(GET_ORDERS_REQ_TIME)
     @GetMapping(value = "/order")
     public String getOrders(
             @RequestParam(required = false, name = "code") String code,
@@ -80,6 +83,7 @@ public class OrderController {
         return "order-list";
     }
 
+    @Timed(GET_MY_ORDERS_REQ_TIME)
     @GetMapping(value = "/order/my-orders")
     public String getMyOrders(Model model){
         List<Order> orders;
@@ -93,7 +97,7 @@ public class OrderController {
     }
 
 
-    //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
+    @Timed(GET_ORDER_EDIT_REQ_TIME)
     @GetMapping(value = "/order/{id}/edit")
     public String editOrder(@PathVariable("id") long id, Model model){
         Order order = orderService.getOrderById(id);
@@ -105,11 +109,10 @@ public class OrderController {
         return "order-edit";
     }
 
-    //@Timed(PATCH_AUTHOR_REQ_TIME)
+    @Timed(PATCH_ORDER_REQ_TIME)
     @PatchMapping(value = "/order/{id}")
     public String saveOrder(@PathVariable("id") long id,
                             @ModelAttribute("order") @Valid OrderDto orderDto, BindingResult result){
-        //authorService.updateAuthorById(id, authorMapper.toAuthor(authorDto));
         if(result.hasErrors()){
             return "order-edit";
         }
@@ -117,6 +120,7 @@ public class OrderController {
         return "redirect:/order";
     }
 
+    @Timed(GET_ORDER_ADD_REQ_TIME)
     @GetMapping(value = "/order/add")
     public String showAddOrderForm(Model model){
         List<Product> productList = productService.getAllProducts();
@@ -134,7 +138,7 @@ public class OrderController {
         return "order-add";
     }
 
-    //@Timed(CREATE_AUTHOR_REQ_TIME)
+    @Timed(CREATE_ORDER_REQ_TIME)
     @PostMapping(value = "/order")
     public String createOrder( @Valid @ModelAttribute("order") Order order,
                               String brand,
@@ -151,25 +155,28 @@ public class OrderController {
         return "redirect:/order/my-orders";
     }
 
-    //@Timed(DELETE_AUTHOR_REQ_TIME)
+    @Timed(DELETE_ORDER_REQ_TIME)
     @DeleteMapping(value = "/order/{id}")
     public String deleteOrder(@PathVariable("id") long id){
         orderService.deleteOrderById(id);
         return "redirect:/order";
     }
 
+    @Timed(CANCEL_ORDER_REQ_TIME)
     @PostMapping(value = "/order/{id}/cancel")
     public String cancelOrder(@PathVariable("id") long id){
         orderService.setStatusByOrderId(id, CANCELED.getRusName());
         return "redirect:/order";
     }
 
+    @Timed(APPROVE_ORDER_REQ_TIME)
     @PostMapping(value = "/order/{id}/approve")
-    public String approveRequest(@PathVariable("id") long id){
+    public String approveOrder(@PathVariable("id") long id){
         orderService.setStatusByOrderId(id, ACTIVE.getRusName());
         return "redirect:/order";
     }
 
+    @Timed(CLOSE_ORDER_REQ_TIME)
     @PostMapping(value = "/order/{id}/close")
     public String closeOrder(@PathVariable("id") long id){
         orderService.setStatusByOrderId(id, DONE.getRusName());

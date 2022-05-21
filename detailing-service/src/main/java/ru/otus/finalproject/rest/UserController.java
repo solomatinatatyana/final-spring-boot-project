@@ -1,5 +1,6 @@
 package ru.otus.finalproject.rest;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import ru.otus.finalproject.service.users.UserService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.otus.finalproject.metrics.Metrics.Users.*;
+
 @Controller
 public class UserController {
 
@@ -25,12 +28,13 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-
+    @Timed(GET_REGISTRATION_REQ_TIME)
     @GetMapping(value = "/registration")
     public String registrationPage(){
         return "sign-up";
     }
 
+    @Timed(CREATE_USER_REQ_TIME)
     @PostMapping(value = "/registration")
     public String registrationUser(User user, Model model){
         userService.createUser(user);
@@ -41,6 +45,7 @@ public class UserController {
         return "redirect:/login";
     }
 
+    @Timed(GET_USERS_REQ_TIME)
     @GetMapping(value = "/admin/user")
     public String getUsers(
             @RequestParam(required = false, name = "fio") String firstName,
@@ -58,7 +63,7 @@ public class UserController {
         return "user-list";
     }
 
-    //@Timed(GET_AUTHOR_EDIT_REQ_TIME)
+    @Timed(GET_USER_EDIT_REQ_TIME)
     @GetMapping(value = "/user/{id}/edit")
     public String editUser(@PathVariable("id") long id, Model model){
         UserDto user = userMapper.toUserDto(userService.getUserById(id));
@@ -66,6 +71,7 @@ public class UserController {
         return "user-edit";
     }
 
+    @Timed(GET_USER_INFO_REQ_TIME)
     @GetMapping(value = "/user/my-info")
     public String infoUser(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -75,9 +81,9 @@ public class UserController {
         return "user-info";
     }
 
-    //@Timed(PATCH_AUTHOR_REQ_TIME)
+    @Timed(PATCH_USER_REQ_TIME)
     @PatchMapping(value = "/user/{id}")
-    public String saveRequest(@PathVariable("id") long id,
+    public String saveUser(@PathVariable("id") long id,
                               @ModelAttribute("user") @Valid UserDto user, BindingResult result){
         if(result.hasErrors()){
             return "user-edit";
