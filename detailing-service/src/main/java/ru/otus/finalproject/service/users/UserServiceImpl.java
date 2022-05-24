@@ -38,11 +38,13 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void updateUserById(long id, User user) {
-        /*User userToBeUpdated = getProductById(id);
-        userToBeUpdated.setProductName(product.getProductName());
-        userToBeUpdated.setDescription(product.getDescription());
-        userToBeUpdated.setPrice(product.getPrice());
-        userToBeUpdated.saveAndFlush(productToBeUpdated);*/
+        User userToBeUpdated = getUserById(id);
+        userToBeUpdated.setUsername(user.getUsername());
+        userToBeUpdated.setPassword(user.getPassword());
+        userToBeUpdated.setEmail(user.getEmail());
+        userToBeUpdated.setActive(user.isActive());
+        userToBeUpdated.setRoles(user.getRoles());
+        userRepository.saveAndFlush(userToBeUpdated);
     }
 
     @Override

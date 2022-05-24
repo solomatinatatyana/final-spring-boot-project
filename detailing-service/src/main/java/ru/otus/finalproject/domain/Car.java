@@ -30,4 +30,9 @@ public class Car {
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "car")
     private Set<Request> requests;
+
+    public Car(long id, String brand) {
+        this.id = id;
+        this.brand = brand;
+    }
 }

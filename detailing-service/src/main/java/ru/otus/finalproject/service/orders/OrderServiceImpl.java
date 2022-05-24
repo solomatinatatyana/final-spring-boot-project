@@ -123,6 +123,7 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.deleteById(id);
     }
 
+    @Override
     public double getProductCost(String product, String brand) {
         ProductPriceVO cost = feignProxy.getPrice(product, brand);
         return cost.getPrice();

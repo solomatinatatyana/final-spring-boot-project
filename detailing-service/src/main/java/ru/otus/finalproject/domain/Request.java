@@ -1,6 +1,5 @@
 package ru.otus.finalproject.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "requests")
@@ -45,4 +43,14 @@ public class Request {
 
     @Column(name = "comment")
     private String comment;
+
+    public Request(long id, String firstName, String status, String phone, Car car, List<Product> products, String comment) {
+        this.id = id;
+        this.firstName = firstName;
+        this.status = status;
+        this.phone = phone;
+        this.car = car;
+        this.products = products;
+        this.comment = comment;
+    }
 }

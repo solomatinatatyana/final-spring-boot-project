@@ -1,14 +1,13 @@
 package ru.otus.finalproject.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "products")
@@ -28,8 +27,11 @@ public class Product {
     @Column(name = "price")
     private double price;
 
-    public Product(long id) {
+    public Product(long id, String productName, String description, double price) {
         this.id = id;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
     }
 
     public Product(String productName, String description) {

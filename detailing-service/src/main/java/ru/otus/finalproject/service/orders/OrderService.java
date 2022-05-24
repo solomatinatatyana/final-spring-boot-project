@@ -23,4 +23,5 @@ public interface OrderService {
     double getTotalSum(List<Product> products);
     double getTotalSumWithTariff(List<Product> products, String brand);
     void setStatusByOrderId(long id, String status);
+    double getProductCost(String product, String brand);
 }

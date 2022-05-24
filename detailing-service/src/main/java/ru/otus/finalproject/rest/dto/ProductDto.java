@@ -17,11 +17,11 @@ public class ProductDto {
     private String description;
 
     @PositiveOrZero(message = "Цена должна быть неотрицательным числом")
-    private String price;
+    private Integer price;
 
     public ProductDto(long id, @NotBlank(message = "Поле обязательное и не может быть пустым") String productName,
                       String description,
-                      @PositiveOrZero(message = "Цена должна быть неотрицательным числом") String price) {
+                      @PositiveOrZero(message = "Цена должна быть неотрицательным числом") Integer price) {
         this.id = id;
         this.productName = productName;
         this.description = description;
